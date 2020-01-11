@@ -1,0 +1,494 @@
+<!doctype html>
+<hmtl lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <title>.: Piantastic :. Learn to play piano</title>
+        <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i" rel="stylesheet">
+        <style>
+            html {
+                font-family: 'IBM Plex Serif', sans-serif;
+                font-weight:100;
+                background-color:#39c;
+            }
+
+            #keyboard-wrapper {
+                border-radius:5px;
+                padding:50px 20px 10px;
+                background-color:#333;
+                position: relative;
+                height:300px;
+                width:964px;
+                margin:0 auto;
+            }
+
+            .key {
+                border-bottom-left-radius:3px;
+                border-bottom-right-radius:3px;
+                position:absolute;
+                top:50px;
+                cursor:pointer;
+            }
+
+            .white-key {
+                height:300px;
+                width:56px;
+                background-color:#fff;
+            }
+
+            .white-key:active {
+                background:linear-gradient(to top,#e5e5e5,#fff);
+            }
+
+            .black-key {
+                height:200px;
+                width: 32px;
+                background-color:#333;
+            }
+            
+            .black-key:active {
+                background:linear-gradient(to top,#151515,#333);
+            }
+
+            .white-key.correct {
+                background: #393 !important;
+            }
+
+            .black-key.correct {
+                background: #393 !important;
+            }
+
+            .white-key.incorrect {
+                background: #933 !important;
+            }
+
+            .black-key.incorrect {
+                background: #933 !important;
+            }
+
+            #note-wrapper {
+                font-size: 5em;
+            }
+            
+            .center-content{
+                text-align:center;
+            }
+
+            #play-btn {
+                display:inline-block;
+                padding:0.25em 1em;
+                margin:0.25em auto;
+                font-size:40px;
+                background:linear-gradient(to bottom,#f7dfa5,#f0c14b);
+                border:1px solid;
+                border-color: #a88734 #9c7e31 #846a29;
+                border-radius:3px;
+                font-weight:300;
+                color:#a88734;
+                text-shadow:-1px -1px rgba(0,0,0,0.6);
+                cursor:pointer;
+            }
+
+            #play-btn:active {
+                background:linear-gradient(to bottom,#f5d78e,#eeb933);
+            }
+
+            .hidden {
+                display:none;
+            }
+
+            .input-wrapper {
+                display: inline-block;
+                position: relative;
+                padding-left: 2em;
+                /*margin-bottom: 12px;*/
+                cursor: pointer;
+                /*
+                font-size: 22px;
+                */
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+
+            .input-wrapper input {
+                display:none;
+            }
+
+            .input-wrapper .radio-btn{
+                position: absolute;
+                top:0;
+                left:0.25em;
+                display:inline-block;
+                width:1.25em;
+                height:1.25em;
+                border-radius:50%;
+                background-color:#ccc
+            }
+
+            .input-wrapper .radio-btn:after {
+                content: "";
+                width:0.5em;
+                height:0.5em;
+                position: absolute;
+                border-radius: 50%;
+                top:0.35em;
+                left:0.35em;
+                display: none;
+                background-color: #2196F3;
+            }
+
+            .input-wrapper input:checked ~ .radio-btn:after {
+                display: inline-block;
+            }
+
+            strong.label{
+                display:block;
+                margin-bottom:0.25em;
+                margin-top:0.75em;
+            }
+
+            sub, sup {
+                font-size:0.25em;
+            }
+
+            sup {
+                position: relative;
+                top:-0.75em;
+            }
+
+            #options-wrapper {
+                margin-left:1em;
+            }
+
+            #counters-wrapper {
+                position: absolute;
+                top:1em;
+                right:1em;
+                text-align:right;
+            }
+
+        </style>
+        <script src="timbre.js"></script>
+    </head>
+    <body>
+        
+        <!--script>
+            //T("sin", {freq:880, mul:0.5}).play();
+            var sine1 = T("sin", {freq:440, mul:0.5});
+            var sine2 = T("sin", {freq:660, mul:0.5});
+
+            T("perc", {r:500}, sine1, sine2).on("ended", function() {
+                this.pause();
+            }).bang().play();
+        </script-->
+
+        <div id="options-wrapper">
+            <div>
+                <strong class="label">Game mode:</strong>
+                <label class="input-wrapper">Notes by name
+                    <input type="radio" checked="checked" name="gameMode" value="0"/>
+                    <span class="radio-btn"></span>
+                </label>
+                <label class="input-wrapper">Pentagram
+                    <input type="radio" name="gameMode" value="1"/>
+                    <span class="radio-btn"></span>
+                </label>
+            </div>
+
+            <div>
+                <strong class="label">Notes by name:</strong>
+                <label class="input-wrapper">Solfege (Do, Re, Mi)
+                    <input type="radio" checked="checked" name="notesType" value="0"/>
+                    <span class="radio-btn"></span>
+                </label>
+                <label class="input-wrapper">Absolute (C, D, E)
+                    <input type="radio" name="notesType" value="1"/>
+                    <span class="radio-btn"></span>
+                </label>
+            </div>
+
+            <!--div>
+                <strong class="label">Pentagram key:</strong>
+                <label class="input-wrapper">Sol
+                    <input type="radio" checked="checked" name="pentagramType" value="0"/>
+                    <span class="radio-btn"></span>
+                </label>
+                <label class="input-wrapper">Fa
+                    <input type="radio" name="pentagramType" value="1"/>
+                    <span class="radio-btn"></span>
+                </label>
+            </div-->
+        </div>
+
+        <div id="counters-wrapper" class="hidden">
+            <div id="round-counter"></div>
+            <div id="time-counter"></div>
+        </div>
+
+        <div class="center-content">
+            <div id="play-btn"><span id="start-txt" class="">Start</span><span id="stop-txt" class="hidden">Stop</span></div>
+            
+            <div id="note-wrapper">The notes will appear here</div>
+        </div>
+
+        <div id="keyboard-wrapper">
+            <div id="w01" class="key white-key" data-index="1"></div>
+            <div id="w02" class="key white-key" data-index="2"></div>
+            <div id="w03" class="key white-key" data-index="3"></div>
+            <div id="w04" class="key white-key" data-index="4"></div>
+            <div id="w05" class="key white-key" data-index="5"></div>
+            <div id="w06" class="key white-key" data-index="6"></div>
+            <div id="w07" class="key white-key" data-index="7"></div>
+            <div id="w08" class="key white-key" data-index="8"></div>
+            <div id="w09" class="key white-key" data-index="9"></div>
+            <div id="w10" class="key white-key" data-index="10"></div>
+            <div id="w11" class="key white-key" data-index="11"></div>
+            <div id="w12" class="key white-key" data-index="12"></div>
+            <div id="w13" class="key white-key" data-index="13"></div>
+            <div id="w14" class="key white-key" data-index="14"></div>
+            <div id="w15" class="key white-key" data-index="15"></div>
+            <div id="w16" class="key white-key" data-index="16"></div>
+            <div id="w17" class="key white-key" data-index="17"></div>
+
+            <div id="b01" class="key black-key" data-index="1"></div>
+            <div id="b02" class="key black-key" data-index="2"></div>
+            <div id="b03" class="key black-key" data-index="3"></div>
+            <div id="b04" class="key black-key" data-index="4"></div>
+            <div id="b05" class="key black-key" data-index="5"></div>
+            <div id="b06" class="key black-key" data-index="6"></div>
+            <div id="b07" class="key black-key" data-index="7"></div>
+            <div id="b08" class="key black-key" data-index="8"></div>
+            <div id="b09" class="key black-key" data-index="9"></div>
+            <div id="b10" class="key black-key" data-index="10"></div>
+            <div id="b11" class="key black-key" data-index="11"></div>
+            <div id="b12" class="key black-key" data-index="12"></div>
+        </div>
+
+        <script>
+            var maxRounds = localStorage.getItem('rounds');
+            var elapsedTime = localStorage.getItem('elapsedTime');
+            if (maxRounds === null) {
+                maxRounds = 0;
+            }
+            if (elapsedTime === null) {
+                elapsedTime = 0;
+            }
+
+            var updateGameTimerInterval = null;
+            var startTime = new Date();
+            var rounds = 0;
+            //event.target.closest(''); //Search for closes ancestor with spefic selection match
+            var difficultMode = 0;//0 => easy (white notes); 1 => hard (black and white notes)
+            var useSolfege = true; //true => use solfege names; false => use absoluteNames
+            var selectedNoteIndex = null;
+            var isBlackNoteSelected = 0;
+            var useSharpNote = 0;
+            var notesType = 0;
+
+            var solfegeWhiteNoteNames = ["Do<sub>Low</sub>", "Re<sub>Low</sub>", "Mi<sub>Low</sub>", "Fa<sub>Low</sub>", "Sol<sub>Low</sub>", "La<sub>Low</sub>", "Si<sub>Low</sub>", "Do", "Re", "Mi", "Fa", "Sol", "La", "Si", "Do<sup>High</sup>", "Re<sup>High</sup>", "Mi<sup>High</sup>"];
+            var absoluteWhiteNoteNames = ["C<sub>Low</sub>", "D<sub>Low</sub>", "E<sub>Low</sub>", "F<sub>Low</sub>", "G<sub>Low</sub>", "A<sub>Low</sub>", "B<sub>Low</sub>", "C", "D", "E", "F", "G", "A", "B", "C<sup>High</sup>", "D<sup>High</sup>", "E<sup>High</sup>"];
+
+            var solfegeBlackNoteNames = ["Do#<sub>Low</sub>", "Re#<sub>Low</sub>", "Fa#<sub>Low</sub>", "Sol#<sub>Low</sub>", "La#<sub>Low</sub>", "Do#", "Re#", "Fa#", "Sol#", "La#", "Do#<sup>High</sup>", "Re#<sup>High</sup>"];
+            var solfegeBlackNoteNamesAlt = ["Do&#9837;<sub>Low</sub>", "Re&#9837;<sub>Low</sub>", "Fa&#9837;<sub>Low</sub>", "Sol&#9837;<sub>Low</sub>", "La&#9837;<sub>Low</sub>", "Do&#9837;", "Re&#9837;", "Fa&#9837;", "Sol&#9837;", "La&#9837;", "Do&#9837;<sup>High</sup>", "Re&#9837;<sup>High</sup>"];
+            var absoluteBlackNoteNames = ["C#<sub>Low</sub>", "D#<sub>Low</sub>", "F#<sub>Low</sub>", "G#<sub>Low</sub>", "A#<sub>Low</sub>", "C#", "D#", "F#", "G#", "A#", "C#<sup>High</sup>", "D#<sup>High</sup>"];
+            var absoluteBlackNoteNamesAlt = ["D&#9837;<sub>Low</sub>", "E&#9837;<sub>Low</sub>", "G&#9837;<sub>Low</sub>", "A&#9837;<sub>Low</sub>", "B&#9837;<sub>Low</sub>", "D&#9837;", "E&#9837;", "G&#9837;", "A&#9837;", "B&#9837;", "D&#9837;<sup>High</sup>", "E&#9837;<sup>High</sup>"];
+
+            var play = false;
+            var validatingKey = false;
+            var validationTimeInMilis = 200;
+            var noteShowCorrectNoteInMilis = 2000;
+            var whiteWidth = 56;
+            var blackWidth = 32;
+            var whiteSeparation = 2;
+            var keyboardLeftSeparation = 10;
+
+            var iterations = 0;
+            var whiteKeys = document.querySelectorAll('.white-key');
+            whiteKeys.forEach(function(element) {
+                var numericLeft = iterations * (whiteWidth + whiteSeparation) + keyboardLeftSeparation;
+                element.style.left = numericLeft + 'px';
+                iterations++;
+            });
+
+            var blackSeparations = [36, 104, 206, 272, 340];
+            iterations = 0;
+            var blackKeys = document.querySelectorAll('.black-key');
+            blackKeys.forEach(function(element) {
+                var numericLeft = Math.floor(iterations/5) * (whiteWidth + whiteSeparation)*7 + blackSeparations[iterations%5] + keyboardLeftSeparation;
+                element.style.left = numericLeft + 'px';
+                iterations++;
+            });
+
+            var playBtn = document.querySelector('#play-btn');
+            if (playBtn != null) {
+                playBtn.addEventListener('click', function (event) {
+                    startGame();
+                });
+            }
+
+            var allKeys = document.querySelectorAll('#keyboard-wrapper .key');
+            allKeys.forEach(function(element) {
+                element.addEventListener('click', function (event) {
+                    if (play && !validatingKey) {
+                        validateKey(event.target);
+                    }
+                });
+            });
+
+            function updateTimer() {
+                var now = new Date();
+                var seconds = Math.floor((now - startTime) / 1000);
+                var minutes = Math.floor(seconds / 60);
+                seconds = seconds % 60;
+                var hours = Math.floor(minutes / 60);
+                document.querySelector('#time-counter').innerHTML = '<strong>Time:</strong> ' + stringIntegerLength(hours, 2) + ':' + stringIntegerLength(minutes, 2) + ':' + stringIntegerLength(seconds, 2);
+            }
+
+            function startGame() {
+                //TODO: useSolfege => depends on the setting
+                validatingKey = false;
+                removeCorrectAndIncorrectClassesFromKeys();
+                if (play) {
+                    clearInterval(updateGameTimerInterval);
+                    document.querySelector('#counters-wrapper').className = 'hidden';
+                    document.querySelector('#round-counter').innerHTML = '';
+                    document.querySelector('#time-counter').innerHTML = '';
+
+                    document.querySelector('#start-txt').className = '';
+                    document.querySelector('#stop-txt').className = 'hidden';
+                    play = false;
+
+                    var noteWrapper = document.querySelector('#note-wrapper');
+                    if (noteWrapper) {
+                        noteWrapper.innerHTML = 'The notes will appear here';
+                    }
+                } else {
+                    document.querySelector('#stop-txt').innerHTML = 'Stop';
+                    rounds = 0;
+                    startTime = new Date();
+                    updateGameTimerInterval = setInterval(updateTimer, 1000);
+                    document.querySelector('#counters-wrapper').className = '';
+                    document.querySelector('#round-counter').innerHTML = '<strong>Rounds:</strong> 0';
+                    document.querySelector('#time-counter').innerHTML = '<strong>Time:</strong> 00:00:00';
+
+                    document.querySelector('#start-txt').className = 'hidden';
+                    document.querySelector('#stop-txt').className = '';
+                    play = true;
+
+                    useSolfege = document.querySelector('input[name=notesType]:checked').value !='1';
+                    selectKey();
+                }
+            }
+
+            function stringIntegerLength(number, digits) {
+                var ret = '' + number;
+                while (ret.length < digits) {
+                    ret = '0' + ret;
+                }
+                return ret;
+            }
+
+            function removeCorrectAndIncorrectClassesFromKeys() {
+                var keys = document.querySelectorAll('.key');
+                keys.forEach(function(key) {
+                    key.className = key.className.replace(/\s\bcorrect\b/gi, '').replace(/\s\bincorrect\b/gi, '');
+                });
+            }
+
+            function selectKey() {
+                removeCorrectAndIncorrectClassesFromKeys();
+
+                document.querySelector('#round-counter').innerHTML = '<strong>Rounds:</strong> ' + rounds;
+                rounds++;
+
+                isBlackNoteSelected = selectWholeNumberInRange(1);
+                var noteName = '';
+                if (isBlackNoteSelected === 1) {
+                    useSharpNote = selectWholeNumberInRange(1);
+                    selectedNoteIndex = selectWholeNumberInRange(solfegeBlackNoteNames.length, 0 , false);
+                    if (useSharpNote) { //use sharp
+                        noteName = absoluteBlackNoteNames[selectedNoteIndex];
+                        if (useSolfege) {
+                            noteName = solfegeBlackNoteNames[selectedNoteIndex];
+                        }
+                    } else { //use bemol
+                        noteName = absoluteBlackNoteNamesAlt[selectedNoteIndex];
+                        if (useSolfege) {
+                            noteName = solfegeBlackNoteNamesAlt[selectedNoteIndex];
+                        }
+                    }
+                } else {
+                    selectedNoteIndex = selectWholeNumberInRange(solfegeWhiteNoteNames.length, 0 , false);
+                    noteName = absoluteWhiteNoteNames[selectedNoteIndex];
+                    if (useSolfege) {
+                        noteName = solfegeWhiteNoteNames[selectedNoteIndex]
+                    }
+                }
+
+                var noteWrapper = document.querySelector('#note-wrapper');
+                if (noteWrapper) {
+                    noteWrapper.innerHTML = noteName;
+                }
+            }
+
+            function validateKey(key) {
+                validatingKey = true;
+                var keyId = key.getAttribute('data-index');
+                var keyClass = key.className;
+                var correctKeyType = true;
+                if (key.className.includes("white-key") && isBlackNoteSelected === 1) {
+                    correctKeyType = false;
+                }
+
+                if (keyId == (selectedNoteIndex + 1) && correctKeyType) {
+                    key.className = keyClass + ' correct';
+                    setTimeout(function () {
+                        validatingKey = false;
+                        selectKey();
+                    }, validationTimeInMilis);
+                } else {
+                    play = false;
+                    var now = new Date();
+                    var blackOrWhiteIdentifierSelector = 'w';
+                    if (isBlackNoteSelected === 1) {
+                        blackOrWhiteIdentifierSelector = 'b';
+                    }
+                    key.className = keyClass + ' incorrect';
+                    var num = stringIntegerLength((selectedNoteIndex + 1), 2);
+                    var correctKeyClass = document.querySelector('#' + blackOrWhiteIdentifierSelector + num).className;
+                    document.querySelector('#' + blackOrWhiteIdentifierSelector + num).className = correctKeyClass + ' correct';
+                    key.className = keyClass + ' incorrect';
+                    clearInterval(updateGameTimerInterval);
+                    if (rounds > maxRounds) {
+                        maxRounds = rounds;
+                    }
+                    if ((now - startTime) < elapsedTime) {
+                        elapsedTime = now - startTime;
+                    }
+                    localStorage.setItem('rounds', maxRounds);
+                    localStorage.setItem('elapsedTime', elapsedTime);
+                    document.querySelector('#stop-txt').innerHTML = 'Restart';
+                }
+            }
+
+            function selectWholeNumberInRange(high, low, inclusive) {
+                if (inclusive === undefined) {
+                    inclusive = true;
+                }
+
+                if (low === undefined) {
+                    low = 0;
+                }
+                
+                var randomNumber = high;
+                if (inclusive) {
+                    randomNumber = Math.floor(Math.random() * (high - low + 1)) + low;
+                } else {
+                    randomNumber = Math.floor(Math.random() * (high - low) + low)
+                }
+                return randomNumber;
+            }
+        </script>
+    </body>
+</hmtl>
