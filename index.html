@@ -1,52 +1,54 @@
 <!doctype html>
 <hmtl lang="en">
+
     <head>
-        <meta charset="UTF-8"/>
+        <meta charset="UTF-8" />
         <title>.: Piantastic :. Learn to play piano</title>
-        <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i"
+            rel="stylesheet">
         <style>
             html {
                 font-family: 'IBM Plex Serif', sans-serif;
-                font-weight:100;
-                background-color:#39c;
+                font-weight: 100;
+                background-color: #39c;
             }
 
             #keyboard-wrapper {
-                border-radius:5px;
-                padding:50px 20px 10px;
-                background-color:#333;
+                border-radius: 5px;
+                padding: 50px 20px 10px;
+                background-color: #333;
                 position: relative;
-                height:300px;
-                width:964px;
-                margin:0 auto;
+                height: 300px;
+                width: 964px;
+                margin: 0 auto;
             }
 
             .key {
-                border-bottom-left-radius:3px;
-                border-bottom-right-radius:3px;
-                position:absolute;
-                top:50px;
-                cursor:pointer;
+                border-bottom-left-radius: 3px;
+                border-bottom-right-radius: 3px;
+                position: absolute;
+                top: 50px;
+                cursor: pointer;
             }
 
             .white-key {
-                height:300px;
-                width:56px;
-                background-color:#fff;
+                height: 300px;
+                width: 56px;
+                background-color: #fff;
             }
 
             .white-key:active {
-                background:linear-gradient(to top,#e5e5e5,#fff);
+                background: linear-gradient(to top, #e5e5e5, #fff);
             }
 
             .black-key {
-                height:200px;
+                height: 200px;
                 width: 32px;
-                background-color:#333;
+                background-color: #333;
             }
-            
+
             .black-key:active {
-                background:linear-gradient(to top,#151515,#333);
+                background: linear-gradient(to top, #151515, #333);
             }
 
             .white-key.correct {
@@ -68,32 +70,32 @@
             #note-wrapper {
                 font-size: 5em;
             }
-            
-            .center-content{
-                text-align:center;
+
+            .center-content {
+                text-align: center;
             }
 
             #play-btn {
-                display:inline-block;
-                padding:0.25em 1em;
-                margin:0.25em auto;
-                font-size:40px;
-                background:linear-gradient(to bottom,#f7dfa5,#f0c14b);
-                border:1px solid;
+                display: inline-block;
+                padding: 0.25em 1em;
+                margin: 0.25em auto;
+                font-size: 40px;
+                background: linear-gradient(to bottom, #f7dfa5, #f0c14b);
+                border: 1px solid;
                 border-color: #a88734 #9c7e31 #846a29;
-                border-radius:3px;
-                font-weight:300;
-                color:#a88734;
-                text-shadow:-1px -1px rgba(0,0,0,0.6);
-                cursor:pointer;
+                border-radius: 3px;
+                font-weight: 300;
+                color: #a88734;
+                text-shadow: -1px -1px rgba(0, 0, 0, 0.6);
+                cursor: pointer;
             }
 
             #play-btn:active {
-                background:linear-gradient(to bottom,#f5d78e,#eeb933);
+                background: linear-gradient(to bottom, #f5d78e, #eeb933);
             }
 
             .hidden {
-                display:none;
+                display: none;
             }
 
             .input-wrapper {
@@ -112,67 +114,68 @@
             }
 
             .input-wrapper input {
-                display:none;
+                display: none;
             }
 
-            .input-wrapper .radio-btn{
+            .input-wrapper .radio-btn {
                 position: absolute;
-                top:0;
-                left:0.25em;
-                display:inline-block;
-                width:1.25em;
-                height:1.25em;
-                border-radius:50%;
-                background-color:#ccc
+                top: 0;
+                left: 0.25em;
+                display: inline-block;
+                width: 1.25em;
+                height: 1.25em;
+                border-radius: 50%;
+                background-color: #ccc
             }
 
             .input-wrapper .radio-btn:after {
                 content: "";
-                width:0.5em;
-                height:0.5em;
+                width: 0.5em;
+                height: 0.5em;
                 position: absolute;
                 border-radius: 50%;
-                top:0.35em;
-                left:0.35em;
+                top: 0.35em;
+                left: 0.35em;
                 display: none;
                 background-color: #2196F3;
             }
 
-            .input-wrapper input:checked ~ .radio-btn:after {
+            .input-wrapper input:checked~.radio-btn:after {
                 display: inline-block;
             }
 
-            strong.label{
-                display:block;
-                margin-bottom:0.25em;
-                margin-top:0.75em;
+            strong.label {
+                display: block;
+                margin-bottom: 0.25em;
+                margin-top: 0.75em;
             }
 
-            sub, sup {
-                font-size:0.25em;
+            sub,
+            sup {
+                font-size: 0.25em;
             }
 
             sup {
                 position: relative;
-                top:-0.75em;
+                top: -0.75em;
             }
 
             #options-wrapper {
-                margin-left:1em;
+                margin-left: 1em;
             }
 
             #counters-wrapper {
                 position: absolute;
-                top:1em;
-                right:1em;
-                text-align:right;
+                top: 1em;
+                right: 1em;
+                text-align: right;
             }
-
         </style>
         <script src="timbre.js"></script>
     </head>
+
     <body>
-        
+
         <!--script>
             //T("sin", {freq:880, mul:0.5}).play();
             var sine1 = T("sin", {freq:440, mul:0.5});
@@ -187,11 +190,11 @@
             <div>
                 <strong class="label">Game mode:</strong>
                 <label class="input-wrapper">Notes by name
-                    <input type="radio" checked="checked" name="gameMode" value="0"/>
+                    <input type="radio" checked="checked" name="gameMode" value="0" />
                     <span class="radio-btn"></span>
                 </label>
                 <label class="input-wrapper">Pentagram
-                    <input type="radio" name="gameMode" value="1"/>
+                    <input type="radio" name="gameMode" value="1" />
                     <span class="radio-btn"></span>
                 </label>
             </div>
@@ -199,11 +202,11 @@
             <div>
                 <strong class="label">Notes by name:</strong>
                 <label class="input-wrapper">Solfege (Do, Re, Mi)
-                    <input type="radio" checked="checked" name="notesType" value="0"/>
+                    <input type="radio" checked="checked" name="notesType" value="0" />
                     <span class="radio-btn"></span>
                 </label>
                 <label class="input-wrapper">Absolute (C, D, E)
-                    <input type="radio" name="notesType" value="1"/>
+                    <input type="radio" name="notesType" value="1" />
                     <span class="radio-btn"></span>
                 </label>
             </div>
@@ -227,8 +230,9 @@
         </div>
 
         <div class="center-content">
-            <div id="play-btn"><span id="start-txt" class="">Start</span><span id="stop-txt" class="hidden">Stop</span></div>
-            
+            <div id="play-btn"><span id="start-txt" class="">Start</span><span id="stop-txt" class="hidden">Stop</span>
+            </div>
+
             <div id="note-wrapper">The notes will appear here</div>
         </div>
 
@@ -268,6 +272,37 @@
         <div id="pressedKeyInfo">Pressed key: <strong></strong></div>
 
         <script>
+            // The following MIDI ACCESS only works for Chrome versions, there is a polifill though: https://github.com/cwilso/WebMIDIAPIShim
+            // Check entry: https://www.smashingmagazine.com/2018/03/web-midi-api/
+            // Requests MIDI Access
+            navigator.requestMIDIAccess({ sysex: true })
+                .then(function (midiAccess) {
+                    for (var input of midiAccess.inputs.values()) {
+                        input.onmidimessage = function (message) {
+                            var command = message.data[0];
+                            var note = message.data[1];
+                            var velocity = (message.data.length > 2) ? message.data[2] : 0; // a velocity value might not be included with a noteOff command
+                            switch (command) {
+                                case 144: // noteOn
+                                    if (velocity > 0) {
+                                        console.log('NOTE ON', note);
+                                    } else {
+                                        console.log('NOTE OFF', note);
+                                    }
+                                    break;
+                                case 128: // noteOff
+                                    console.log('NOTE OFF', note);
+                                    break;
+                                // we could easily expand this switch statement to cover other types of commands such as controllers or sysex
+                            }
+                        }
+                    }
+                }, function (err) {
+                    console.log(err);
+                });
+
+            // IN YAMAHA P115 C Major is 60, is the same case for all the other midi inputs?
+
             var maxRounds = localStorage.getItem('rounds');
             var elapsedTime = localStorage.getItem('elapsedTime');
             if (maxRounds === null) {
@@ -307,7 +342,7 @@
 
             var iterations = 0;
             var whiteKeys = document.querySelectorAll('.white-key');
-            whiteKeys.forEach(function(element) {
+            whiteKeys.forEach(function (element) {
                 var numericLeft = iterations * (whiteWidth + whiteSeparation) + keyboardLeftSeparation;
                 element.style.left = numericLeft + 'px';
                 iterations++;
@@ -316,8 +351,8 @@
             var blackSeparations = [36, 104, 206, 272, 340];
             iterations = 0;
             var blackKeys = document.querySelectorAll('.black-key');
-            blackKeys.forEach(function(element) {
-                var numericLeft = Math.floor(iterations/5) * (whiteWidth + whiteSeparation)*7 + blackSeparations[iterations%5] + keyboardLeftSeparation;
+            blackKeys.forEach(function (element) {
+                var numericLeft = Math.floor(iterations / 5) * (whiteWidth + whiteSeparation) * 7 + blackSeparations[iterations % 5] + keyboardLeftSeparation;
                 element.style.left = numericLeft + 'px';
                 iterations++;
             });
@@ -330,7 +365,7 @@
             }
 
             var allKeys = document.querySelectorAll('#keyboard-wrapper .key');
-            allKeys.forEach(function(element) {
+            allKeys.forEach(function (element) {
                 element.addEventListener('click', function (event) {
                     if (play && !validatingKey) {
                         validateKey(event.target);
@@ -388,7 +423,7 @@
                     document.querySelector('#stop-txt').className = '';
                     play = true;
 
-                    useSolfege = document.querySelector('input[name=notesType]:checked').value !='1';
+                    useSolfege = document.querySelector('input[name=notesType]:checked').value != '1';
                     selectKey();
                 }
             }
@@ -403,7 +438,7 @@
 
             function removeCorrectAndIncorrectClassesFromKeys() {
                 var keys = document.querySelectorAll('.key');
-                keys.forEach(function(key) {
+                keys.forEach(function (key) {
                     key.className = key.className.replace(/\s\bcorrect\b/gi, '').replace(/\s\bincorrect\b/gi, '');
                 });
             }
@@ -418,7 +453,7 @@
                 var noteName = '';
                 if (isBlackNoteSelected === 1) {
                     useSharpNote = selectWholeNumberInRange(1);
-                    selectedNoteIndex = selectWholeNumberInRange(solfegeBlackNoteNames.length, 0 , false);
+                    selectedNoteIndex = selectWholeNumberInRange(solfegeBlackNoteNames.length, 0, false);
                     if (useSharpNote) { //use sharp
                         noteName = absoluteBlackNoteNames[selectedNoteIndex];
                         if (useSolfege) {
@@ -431,7 +466,7 @@
                         }
                     }
                 } else {
-                    selectedNoteIndex = selectWholeNumberInRange(solfegeWhiteNoteNames.length, 0 , false);
+                    selectedNoteIndex = selectWholeNumberInRange(solfegeWhiteNoteNames.length, 0, false);
                     noteName = absoluteWhiteNoteNames[selectedNoteIndex];
                     if (useSolfege) {
                         noteName = solfegeWhiteNoteNames[selectedNoteIndex]
@@ -492,7 +527,7 @@
                 if (low === undefined) {
                     low = 0;
                 }
-                
+
                 var randomNumber = high;
                 if (inclusive) {
                     randomNumber = Math.floor(Math.random() * (high - low + 1)) + low;
