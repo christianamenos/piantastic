@@ -265,6 +265,8 @@
             <div id="b12" class="key black-key" data-index="12"></div>
         </div>
 
+        <div id="pressedKeyInfo">Pressed key: <strong></strong></div>
+
         <script>
             var maxRounds = localStorage.getItem('rounds');
             var elapsedTime = localStorage.getItem('elapsedTime');
@@ -290,7 +292,7 @@
             var absoluteWhiteNoteNames = ["C<sub>Low</sub>", "D<sub>Low</sub>", "E<sub>Low</sub>", "F<sub>Low</sub>", "G<sub>Low</sub>", "A<sub>Low</sub>", "B<sub>Low</sub>", "C", "D", "E", "F", "G", "A", "B", "C<sup>High</sup>", "D<sup>High</sup>", "E<sup>High</sup>"];
 
             var solfegeBlackNoteNames = ["Do#<sub>Low</sub>", "Re#<sub>Low</sub>", "Fa#<sub>Low</sub>", "Sol#<sub>Low</sub>", "La#<sub>Low</sub>", "Do#", "Re#", "Fa#", "Sol#", "La#", "Do#<sup>High</sup>", "Re#<sup>High</sup>"];
-            var solfegeBlackNoteNamesAlt = ["Do&#9837;<sub>Low</sub>", "Re&#9837;<sub>Low</sub>", "Fa&#9837;<sub>Low</sub>", "Sol&#9837;<sub>Low</sub>", "La&#9837;<sub>Low</sub>", "Do&#9837;", "Re&#9837;", "Fa&#9837;", "Sol&#9837;", "La&#9837;", "Do&#9837;<sup>High</sup>", "Re&#9837;<sup>High</sup>"];
+            var solfegeBlackNoteNamesAlt = ["Re&#9837;<sub>Low</sub>", "Mi&#9837;<sub>Low</sub>", "Sol&#9837;<sub>Low</sub>", "La&#9837;<sub>Low</sub>", "Si&#9837;<sub>Low</sub>", "Re&#9837;", "Mi&#9837;", "Sol&#9837;", "La&#9837;", "Si&#9837;", "Re&#9837;<sup>High</sup>", "Mi&#9837;<sup>High</sup>"];
             var absoluteBlackNoteNames = ["C#<sub>Low</sub>", "D#<sub>Low</sub>", "F#<sub>Low</sub>", "G#<sub>Low</sub>", "A#<sub>Low</sub>", "C#", "D#", "F#", "G#", "A#", "C#<sup>High</sup>", "D#<sup>High</sup>"];
             var absoluteBlackNoteNamesAlt = ["D&#9837;<sub>Low</sub>", "E&#9837;<sub>Low</sub>", "G&#9837;<sub>Low</sub>", "A&#9837;<sub>Low</sub>", "B&#9837;<sub>Low</sub>", "D&#9837;", "E&#9837;", "G&#9837;", "A&#9837;", "B&#9837;", "D&#9837;<sup>High</sup>", "E&#9837;<sup>High</sup>"];
 
@@ -333,8 +335,18 @@
                     if (play && !validatingKey) {
                         validateKey(event.target);
                     }
+                    printKey(event.target);
                 });
             });
+
+            function printKey(key) {
+                var keyIndex = parseInt(key.getAttribute('data-index')) - 1;
+                if (key.className.includes("white-key")) {
+                    document.querySelector('#pressedKeyInfo strong').innerHTML = solfegeWhiteNoteNames[keyIndex];
+                } else {
+                    document.querySelector('#pressedKeyInfo strong').innerHTML = `${solfegeBlackNoteNames[keyIndex]} / ${solfegeBlackNoteNamesAlt[keyIndex]}`;
+                }
+            }
 
             function updateTimer() {
                 var now = new Date();
